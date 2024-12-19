@@ -2,6 +2,7 @@ package de.check.checkers;
 
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
@@ -9,17 +10,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import de.check.checkers.ui.GraphicalUI;
+
 public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        WebView webView = new WebView();
-        System.out.println("Hello World");
-        webView.getEngine().load("http://google.com");
+        Group root = new Group();
+        GraphicalUI defScene = new GraphicalUI(root);
 
-        VBox vBox = new VBox(webView);
-        Scene scene = new Scene(vBox, 960, 600);
 
-        stage.setScene(scene);
+
+        stage.setScene(GraphicalUI.checkerBoard());
         stage.show();
     }
 
