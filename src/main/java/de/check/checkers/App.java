@@ -2,6 +2,8 @@ package de.check.checkers;
 
 
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -12,11 +14,13 @@ import java.io.IOException;
 
 import de.check.checkers.ui.GraphicalUI;
 
-public class App extends Application {
+import netscape.javascript.JSObject;
+
+public class App extends Application{
     @Override
     public void start(Stage stage) throws IOException {
         Group root = new Group();
-        GraphicalUI defScene = new GraphicalUI(root);
+
 
 
 
@@ -27,4 +31,6 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+
 }

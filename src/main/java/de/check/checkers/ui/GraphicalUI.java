@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
+import de.check.checkers.App;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSObject;
 
 
 public class GraphicalUI extends Scene {
@@ -29,7 +31,7 @@ public class GraphicalUI extends Scene {
         }
 
         // Datei in WebView laden
-        webEngine.load(url.toString());
+        webEngine.load(url.toExternalForm());
 
         // WebView in einer VBox einbetten
         VBox vbox = new VBox(browser);

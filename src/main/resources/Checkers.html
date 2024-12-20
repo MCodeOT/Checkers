@@ -2,13 +2,106 @@
 	<html>
 
 		<head>
-			<title>Page Title</title>
+			<meta charset="utf-8">
+			<meta name = "viewport" content = "width = device-width, initial-scale = 1">
+			<title>Checkers</title>
 		</head>
 		<body>
 		<link rel="stylesheet" href="mystyle.css">
+		<div id="outerContainer">
+		<div class="container">
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+			<div class='white'></div>
+			<div class='black'></div>
+		</div>
+		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				// Alle Felder auswählen
+				const fields = document.querySelectorAll('.black, .white');
 
-			<h1>Checkers Window</h1>
-			<p>The Game will be playable here</p>
+				// Klick-Events zuweisen
+				fields.forEach(field => {
+					field.addEventListener('click', () => {
+						// Prüfen, ob das Feld bereits hervorgehoben ist
+						if (field.classList.contains('active')) {
+							// Zurücksetzen: Hervorhebung entfernen und ursprüngliche Farbe wiederherstellen
+							field.classList.remove('active');
+							field.style.backgroundColor = field.classList.contains('black') ? 'black' : 'white';
+						} else {
+							// Hervorheben: Alle Felder zurücksetzen, aktuelles aktivieren
+							fields.forEach(f => {
+								f.classList.remove('active');
+								f.style.backgroundColor = f.classList.contains('black') ? 'black' : 'white';
+							});
+							field.classList.add('active');
+							field.style.backgroundColor = '#84b96f'; // Beispiel: Feld hervorheben
+						}
+					});
+				});
+			});
+		</script>
 
 		</body>
 	</html>
