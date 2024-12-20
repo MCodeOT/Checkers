@@ -33,13 +33,27 @@ public class GraphicalUI extends Scene {
         // Datei in WebView laden
         webEngine.load(url.toExternalForm());
 
+        // Java-Callback für JavaScript einrichten
+        webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                // Verbindung zwischen Java und JavaScript erstellen
+                JSObject window = (JSObject) webEngine.executeScript("window");
+                window.setMember("java", new JavaFXInterface());
+            }
+        });
+
         // WebView in einer VBox einbetten
         VBox vbox = new VBox(browser);
 
         // Scene erstellen und zurückgeben
         return new Scene(vbox);
     }
-
-
+    // JavaScript-Interface für JavaScript-Callbacks
+    public static class JavaFXInterface {
+        public void handleFieldClick(String color) {
+            // Logik für angeklicktes Feld
+            System.out.println("Das angeklickte Feld ist: " + color);
+        }
+    }
 
 }

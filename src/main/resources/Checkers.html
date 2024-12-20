@@ -84,24 +84,32 @@
 				// Klick-Events zuweisen
 				fields.forEach(field => {
 					field.addEventListener('click', () => {
-						// Prüfen, ob das Feld bereits hervorgehoben ist
+						const color = field.classList.contains('black') ? 'black' : 'white';
+
+						// Java-Callback aufrufen
+						if (!field.classList.contains('active')) {
+							if (window.java) {
+								window.java.handleFieldClick(color); // Übergibt die Farbe an Java
+							}
+						}
+
+						// angeklicktes Feld Hervorheben
 						if (field.classList.contains('active')) {
-							// Zurücksetzen: Hervorhebung entfernen und ursprüngliche Farbe wiederherstellen
 							field.classList.remove('active');
-							field.style.backgroundColor = field.classList.contains('black') ? 'black' : 'white';
+							field.style.backgroundColor = color;
 						} else {
-							// Hervorheben: Alle Felder zurücksetzen, aktuelles aktivieren
 							fields.forEach(f => {
 								f.classList.remove('active');
 								f.style.backgroundColor = f.classList.contains('black') ? 'black' : 'white';
 							});
 							field.classList.add('active');
-							field.style.backgroundColor = '#84b96f'; // Beispiel: Feld hervorheben
+							field.style.backgroundColor = '#84b96f';
 						}
 					});
 				});
 			});
 		</script>
+
 
 		</body>
 	</html>
