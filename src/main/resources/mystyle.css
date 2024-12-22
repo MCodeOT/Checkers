@@ -3,37 +3,43 @@
     margin: 0;
     padding: 0;
 }
-    .container {
 
-        /*position: relative;*/
-        display: grid;
-        grid-template-columns:  10vh 10vh 10vh 10vh 10vh 10vh 10vh 10vh;
-        grid-template-rows:  10vh 10vh 10vh 10vh 10vh 10vh 10vh 10vh;
+#container {
+    /*position: relative;*/
+    display: grid;
+    grid-template-columns:  10vh 10vh 10vh 10vh 10vh 10vh 10vh 10vh;
+    grid-template-rows:  10vh 10vh 10vh 10vh 10vh 10vh 10vh 10vh;
 
-        margin-left: calc((100vw - 80vh)/2);
-        margin-top: calc((100vh - 80vh)/2);
+    margin-left: calc((100vw - 80vh) / 2);
+    margin-top: calc((100vh - 80vh) / 2);
+}
 
+.black {
+    background-color: Black;
+    cursor: pointer;
+    user-select: none;
+}
 
-    }
+.black:hover {
+    background-color: #3E3E3E;
+}
 
-    .black {
-        background-color: Black;
-        cursor: pointer;
-        user-select: none;
+.white {
+    background-color: white;
+    cursor: pointer;
+    user-select: none;
+}
 
-        .black:hover {
-            background: #3E3E3E;
-        }
-    }
-    .white {
-        background-color: white;
-        cursor: pointer;
-        user-select: none;
+.white:hover {
+    background-color: #E3E3E3;
+}
 
-        .white:hover {
-            background: #E3E3E3;
-        }
-    }
+.active {
+    background-color: #84b96f;
+}
 
+.active:hover {
+    background-color: #719E5F;
+}
 
 

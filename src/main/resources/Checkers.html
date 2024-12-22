@@ -1,115 +1,14 @@
 <!DOCTYPE html>
-	<html>
+<html lang="DE">
 
-		<head>
-			<meta charset="utf-8">
-			<meta name = "viewport" content = "width = device-width, initial-scale = 1">
-			<title>Checkers</title>
-		</head>
-		<body>
-		<link rel="stylesheet" href="mystyle.css">
-		<div id="outerContainer">
-		<div class="container">
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-			<div class='white'></div>
-			<div class='black'></div>
-		</div>
-		</div>
-		<script>
-			document.addEventListener('DOMContentLoaded', () => {
-				// Alle Felder auswählen
-				const fields = document.querySelectorAll('.black, .white');
-
-				// Klick-Events zuweisen
-				fields.forEach(field => {
-					field.addEventListener('click', () => {
-						const color = field.classList.contains('black') ? 'black' : 'white';
-
-						// Java-Callback aufrufen
-						if (!field.classList.contains('active')) {
-							if (window.java) {
-								window.java.handleFieldClick(color); // Übergibt die Farbe an Java
-							}
-						}
-
-						// angeklicktes Feld Hervorheben
-						if (field.classList.contains('active')) {
-							field.classList.remove('active');
-							field.style.backgroundColor = color;
-						} else {
-							fields.forEach(f => {
-								f.classList.remove('active');
-								f.style.backgroundColor = f.classList.contains('black') ? 'black' : 'white';
-							});
-							field.classList.add('active');
-							field.style.backgroundColor = '#84b96f';
-						}
-					});
-				});
-			});
-		</script>
-
-
-		</body>
-	</html>
+<head>
+	<meta charset="utf-8">
+	<meta name = "viewport" content = "width = device-width, initial-scale = 1">
+	<title>Checkers</title>
+	<link rel="stylesheet" href="mystyle.css">
+	<script src="scripts.js"></script>
+</head>
+<body>
+<div id="container"/>
+</body>
+</html>
