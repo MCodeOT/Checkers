@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
+import de.check.checkers.utils.Controller;
+
 import java.io.IOException;
 
 import de.check.checkers.ui.GraphicalUI;
@@ -25,6 +27,9 @@ public class App extends Application{
     }
 
     public static void main(String[] args) {
+        //Controller controller = new Controller();
+
+        //controller.startGame();
         launch();
     }
 

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import de.check.checkers.App;
+import de.check.checkers.utils.Controller;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -16,9 +17,7 @@ import netscape.javascript.JSObject;
 public class GraphicalUI extends Scene {
     public GraphicalUI(Parent root){
         super(root);
-
     }
-
     public static Scene checkerBoard()  {
         // WebView-Element erstellen
         WebView browser = new WebView();
@@ -50,10 +49,15 @@ public class GraphicalUI extends Scene {
     }
     // JavaScript-Interface für JavaScript-Callbacks
     public static class JavaFXInterface {
+
+        Controller controller = new Controller();
+
         public void handleFieldClick(String color) {
             // Logik für angeklicktes Feld
             System.out.println("Das angeklickte Feld ist: " + color);
+//            controller.startGame();
         }
+
     }
 
 }

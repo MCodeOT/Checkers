@@ -1,6 +1,6 @@
 package de.check.checkers.structures;
 
-import de.check.checkers.utils.Position;
+import de.check.checkers.structures.Position;
 
 
 public class Piece {
