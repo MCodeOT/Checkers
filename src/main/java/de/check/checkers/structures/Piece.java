@@ -20,7 +20,3 @@ public class Piece {
     public void setCrowned(boolean isCrowned) { this.isCrowned = isCrowned; }
     public Position getCurrentPosition() { return currentPosition; }
     public void setCurrentPosition (Position currentPosition) { this.currentPosition = currentPosition; }
-
-
-    }
-
