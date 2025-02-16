@@ -5,13 +5,18 @@ window.onload = init;
 function load_Board() {
 
     const container = document.querySelector('#container');
-    for (let row = 0; row < fieldSize; row++) {
-        for (let col = 0; col < fieldSize; col++) {
+    for (let col = 0; col < fieldSize; col++) {
+        for (let row = 0; row < fieldSize; row++) {
             const field = document.createElement('div');
 
-            field.classList.add((row + col) % 2 === 0 ? 'white' : 'black');
+            field.classList.add((col + row) % 2 === 0 ? 'white' : 'black');
+
+            field.dataset.x = row+1;
+            field.dataset.y = fieldSize-col;
+
             container.appendChild(field);
             field.addEventListener('click', (event) => isClicked(event.currentTarget));
+
 
         }
     }
@@ -21,10 +26,13 @@ function load_Board() {
 function isClicked(field) {
     const color = field.classList.contains('black') ? 'black' : 'white';
 
+    const x = field.dataset.x;
+    const y = field.dataset.y;
+
     // Java-Callback aufrufen
     if (!field.classList.contains('active')) {
         if (window.java) {
-            window.java.handleFieldClick(color); // Übergibt die Farbe an Java
+            window.java.handleFieldClick(`${color}, ${x}, ${y}`); // Übergibt die Farbe und Koordinaten an Java
         }
     }
 
@@ -38,12 +46,22 @@ function isClicked(field) {
         field.classList.add('active');
     }
 
+
+
 }
 
+function getCoordinates()    {
+
+}
 
 function init() {
     load_Board();
 }
 
+function reloadCheckers()    {
+    console.log('reloaded checkers');
+    handleReloadCheckers();
+
+}
 
 
