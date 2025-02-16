@@ -34,4 +34,23 @@ public class Piece {
     public void setCurrentPosition(Position currentPosition) {
         this.currentPosition = currentPosition;
     }
+
+    public String toString(){
+        StringBuilder sb=new StringBuilder();
+        if(isBlack){
+            sb.append("B");
+        }else{
+            sb.append("W");
+        }
+        if(isCrowned){
+            sb.append("C");
+        }else{
+            sb.append(" ");
+        }
+        if(id<10){
+            sb.append("0");
+        }
+        sb.append(id);
+        return (sb.toString());
+    }
 }

@@ -4,33 +4,82 @@ import java.util.ArrayList;
 
 public class Board {
 
-    public Board() {
+    private ArrayList<Piece> board;
+    private final int size;
 
-        int size = 8;
-        ArrayList<Piece> board = new ArrayList<Piece>();
-        byte id = 0;
+    public Board(int size) {
+        this.size = size;
+        this.board = new ArrayList<Piece>();
+
         boolean isBlack = false;
-
+        byte id = 0;
         for (int y = 0; y < size; y++) {
-
             int oddAdjuster = y % 2;
-
+            if (y == size / 2 - 1) {
+                isBlack = !isBlack;
+            }
             for (int x = 0; x < size; x += 2) {
-
-                if (y != size / 2 || y != size / 2 - 1) {
+                if (!(y == size / 2 || y == size / 2 - 1)) {
                     Position curPos = new Position(x + oddAdjuster, y);
-                    if (y < size/2 - 1) {
-                        isBlack = true;
-                    } else {
-                        isBlack = false;
-                    }
+
                     board.add(new Piece(isBlack, id, curPos));
                     id++;
                 }
+            }
+        }
+    }
 
+    public void deletePieceFromBoard(Position currentPos) {
+        this.board.remove(currentPos);
+    }
+
+    public void movePiece(Position currentPos, Position targetPos) {
+        int x = currentPos.getX();
+        int y = currentPos.getY();
+        int nextX = targetPos.getX();
+        int nextY = targetPos.getY();
+
+        for (Piece p : board) {
+            Position pos = p.getCurrentPosition();
+            if (pos.equals(currentPos)) {
+                p.setCurrentPosition(targetPos);
+                break;
             }
         }
 
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int y = 0; y < size; y++) {
+            builder.append("|");
+            for (int x = 0; x < size; x++) {
+                Position pos = new Position(x, y);
+
+                boolean isPieceThere = false;
+
+
+                for (Piece p : board) {
+                    if (pos.equals(p.getCurrentPosition())) {
+                        isPieceThere = true;
+                        builder.append(p);
+                        builder.append(" |");
+                    }
+                }
+                if (!isPieceThere) {
+                    builder.append("     |");
+                }
+
+
+            }
+            builder.append("\n");
+        }
+
+        return builder.toString();
+    }
+
+    public ArrayList getBoard() {
+        return board;
+    }
 }

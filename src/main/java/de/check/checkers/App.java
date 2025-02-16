@@ -1,6 +1,7 @@
 package de.check.checkers;
 
 
+import de.check.checkers.structures.Board;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -31,7 +32,11 @@ public class App extends Application{
     }
 
     public static void main(String[] args) {
-        launch();
+        //launch();
+        Board board1= new Board(8);
+        System.out.println(board1);
+
+
     }
 
 
