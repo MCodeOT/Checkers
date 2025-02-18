@@ -29,6 +29,26 @@ public class Board {
         }
     }
 
+    public ArrayList<Piece> getBoard() {
+        return this.board;
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public Piece getPieceFromPosition(Position currentPos) {
+        Piece returnValue = null;
+
+        for (int i = 0; i < this.board.size(); i++) {
+            if (currentPos.equals(this.board.get(i).getCurrentPosition())) {
+                returnValue = this.board.get(i);
+            }
+        }
+
+        return returnValue;
+    }
+
     public void deletePieceFromBoard(Position currentPos) {
         this.board.remove(currentPos);
     }
@@ -39,7 +59,7 @@ public class Board {
         int nextX = targetPos.getX();
         int nextY = targetPos.getY();
 
-        for (Piece p : board) {
+        for (Piece p : this.board) {
             Position pos = p.getCurrentPosition();
             if (pos.equals(currentPos)) {
                 p.setCurrentPosition(targetPos);
@@ -60,7 +80,7 @@ public class Board {
                 boolean isPieceThere = false;
 
 
-                for (Piece p : board) {
+                for (Piece p : this.board) {
                     if (pos.equals(p.getCurrentPosition())) {
                         isPieceThere = true;
                         builder.append(p);
@@ -79,7 +99,4 @@ public class Board {
         return builder.toString();
     }
 
-    public ArrayList getBoard() {
-        return board;
-    }
 }
