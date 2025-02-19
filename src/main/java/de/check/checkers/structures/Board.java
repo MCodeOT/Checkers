@@ -11,16 +11,21 @@ public class Board {
         this.size = size;
         this.board = new ArrayList<Piece>();
 
-        boolean isBlack = false;
+        boolean isBlack = true;
         byte id = 0;
         for (int y = 0; y < size; y++) {
-            int oddAdjuster = y % 2;
+            int adder=0;
             if (y == size / 2 - 1) {
                 isBlack = !isBlack;
             }
             for (int x = 0; x < size; x += 2) {
+                if(y%2==0){
+                    adder=0;
+                } else {
+                    adder=1;
+                }
                 if (!(y == size / 2 || y == size / 2 - 1)) {
-                    Position curPos = new Position(x + oddAdjuster, y);
+                    Position curPos = new Position(x + adder, y);
 
                     board.add(new Piece(isBlack, id, curPos));
                     id++;
@@ -72,7 +77,7 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (int y = 0; y < size; y++) {
+        for (int y = size-1; y >=0; y--) {
             builder.append("|");
             for (int x = 0; x < size; x++) {
                 Position pos = new Position(x, y);
