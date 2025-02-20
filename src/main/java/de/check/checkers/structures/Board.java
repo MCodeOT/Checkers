@@ -27,7 +27,7 @@ public class Board {
                 if (!(y == size / 2 || y == size / 2 - 1)) {
                     Position curPos = new Position(x + adder, y);
 
-                    board.add(new Piece(isBlack, id, curPos));
+                    this.board.add(new Piece(isBlack, id, curPos));
                     id++;
                 }
             }
@@ -35,19 +35,19 @@ public class Board {
     }
 
     public ArrayList<Piece> getBoard() {
-        return this.board;
+        return board;
     }
 
     public int getSize() {
-        return this.size;
+        return size;
     }
 
-    public Piece getPieceFromPosition(Position currentPos) {
+    public Piece getPieceFromPosition(Position pos) {
         Piece returnValue = null;
 
-        for (int i = 0; i < this.board.size(); i++) {
-            if (currentPos.equals(this.board.get(i).getCurrentPosition())) {
-                returnValue = this.board.get(i);
+        for (int i = 0; i < board.size(); i++) {
+            if (pos.equals(board.get(i).getCurrentPosition())) {
+                returnValue = board.get(i);
             }
         }
 
@@ -55,7 +55,7 @@ public class Board {
     }
 
     public void deletePieceFromBoard(Position currentPos) {
-        this.board.remove(currentPos);
+        board.remove(currentPos);
     }
 
     public void movePiece(Position currentPos, Position targetPos) {
@@ -64,7 +64,7 @@ public class Board {
         int nextX = targetPos.getX();
         int nextY = targetPos.getY();
 
-        for (Piece p : this.board) {
+        for (Piece p : board) {
             Position pos = p.getCurrentPosition();
             if (pos.equals(currentPos)) {
                 p.setCurrentPosition(targetPos);
@@ -85,7 +85,7 @@ public class Board {
                 boolean isPieceThere = false;
 
 
-                for (Piece p : this.board) {
+                for (Piece p : board) {
                     if (pos.equals(p.getCurrentPosition())) {
                         isPieceThere = true;
                         builder.append(p);
