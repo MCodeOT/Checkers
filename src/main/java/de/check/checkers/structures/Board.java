@@ -54,6 +54,16 @@ public class Board {
         return returnValue;
     }
 
+    public boolean isPositionOnBoard(Position pos) {
+        boolean returnValue = false;
+
+        if (pos.getX() < size && pos.getX() >= 0 && pos.getY() < size && pos.getY() >= 0) {
+            returnValue = true;
+        }
+
+        return returnValue;
+    }
+
     public void deletePieceFromBoard(Position currentPos) {
         board.remove(currentPos);
     }
