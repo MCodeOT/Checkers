@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Controller {
     private Board board;
-    private int boardSize;
+    private final int boardSize;
     private Position firstClickedPos;
     private List<Position> captureQueue;
 
