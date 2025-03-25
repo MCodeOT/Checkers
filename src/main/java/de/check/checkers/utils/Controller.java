@@ -2,116 +2,170 @@ package de.check.checkers.utils;
 
 import de.check.checkers.structures.Board;
 import de.check.checkers.structures.Piece;
-import de.check.checkers.structures.Player;
 import de.check.checkers.structures.Position;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Controller {
-    Player playerBlack;
-    Player playerWhite;
+    private Board board;
+    private int boardSize;
+    private Position firstClickedPos;
+    private List<Position> captureQueue;
 
-    Board board;
-    int boardSize;
-
-//    private boolean someoneLost = false;
-
-    public Controller() {
-        // Create Players
-        playerBlack = new Player(true);
-        playerWhite = new Player(false);
-
-        // Create a new Board
-        this.boardSize = 8;
-        board = new Board(boardSize);
+    public Controller(int boardSize) {
+        this.boardSize = boardSize;
+        this.captureQueue = new ArrayList<Position>();
+//         Create a new Board
+        this.board = new Board(boardSize);
     }
 
-//    public int movePiece(Position currentPos, Position targetPos) {
-//        // Check if Move is legit; if yes: do move, if not: give notification
-//        if (moveIsLegit()) {
-//            board.movePiece(currentPos, targetPos);
-//            // Check if someone has won; if yes: trigger win screen, if not: do nothing
-//            if (someoneWon()) {
-////                whoWon()
-//            }
-//        } else {
-//            System.out.println("This move is not available, please pick another one.");
-//            //
-//        }
+    /**
+     * Handles the current click.
+     *
+     * @param currentPos The current clicked {@link Position}
+     * @return {@code int} code depedant on the successfulness of the move
+     */
+//    public int handlePositionTransmission(Position currentPos) {
+//        if (!isPositionValid()) return -1;
 //
+//        // Return fitting style int code.
+//        // Example: return 1 :: move successful
+//        // Check if something was selected before
+//        //      If not:
+//        //          firstClickedPos is the current clicked position
+//        //      Else:
+//        //          If the current pos is the previously saved pos:
+//        //              Remove the selection
+//        //              Return unhighlight code
+//        //          Else:
+//        //              Handle second click, validate the move, move
+//        // Überprüfe Capture Zwang
+//
+//
+//        if (firstClickedPos != null) {
+//            if (currentPos == firstClickedPos) {
+//                firstClickedPos = null;
+//                // return unhighlight code
+//            } else {
+//                if (getPieceFromPosition(currentPos) == null) {
+//                    if (isNormalMoveValid(firstClickedPos, currentPos)) {
+//                        movePiece(firstClickedPos, currentPos);
+//                    } else if (isCaptureValid()) {
+//                        captureQueue.add(currentPos);
+//                    }
+//                    /* ALARM! DANGEROUS CODE AT RUNTIME LEVEL EXECUTION ERROR */
+//                    firstClickedPos = null;
+//                }
+//            }
+//        }else{
+//            if(getPieceFromPosition(currentPos)!=null){
+//                captureQueue.add(currentPos);
+//            }
+//        }
 //        return 0;
 //    }
-//
-//    public boolean moveIsLegit(Position currentPos, Position targetPos) {
-//        boolean returnValue = false;
-//
-//
-//        /*
-//
-//        Check for each player separately if the direction is correct
-//        Normal Pieces can only move and capture forwards one field except if it is a chain of captures
-//        Crowned Pieces can move and capture forwards and backwards and they can move as many fields as they want
-//
-//    / /        If Normal Piece reaches the last row, they become crowned
-//
-//        1. Check if there is a Piece on curPos
-//        2. Check if the Piece on curPos is the color of the player who's current turn it is
-//        3. Check if move (isCrowned or not & isBlack or not)
-//            - Move isNotCrowned & isBlack
-//                - diagonal top right and diagonal top left, as long as there is no piece on tarPos
-//                - tarPos.y - curPos.y > 0 && Math.abs(tarPos.x - curPos.x) == 1
-//            - Move isNotCrowned & isNotBlack
-//                - diagonal bottom right and diagonal bottom left, as long as there is no piece on tarPos
-//                - tarPos.y - curPos.y < 0 && Math.abs(tarPos.x - curPos.x) == 1
-//            - Move isCrowned (Piece color is not important here)
-//                - diagonal every direction, as long as there are no pieces between curPos and tarPos
-//                -
-//        4. Check if simple capture (isCrowned or not & isBlack or not)
-//            - Simple Capture isNotCrowned & isBlack:
-//            - Simple Capture isNotCrowned & isNotBlack:
-//            - Simple Capture isCrowned & isBlack:
-//            - Simple Capture isCrowned & isNotBlack:
-//        5. Check if chained capture (isCrowned or not & isBlack or not)
-//            - Chained Capture isNotCrowned & isBlack:
-//            - Chained Capture isNotCrowned & isNotBlack:
-//            - Chained Capture isCrowned & isBlack:
-//            - Chained Capture isCrowned & isNotBlack:
-//        6. Check if Piece (if isNotCrowned) after move isCrowned
-//        7. Check if Player has won after move
-//
-//        */
-//
-//
-//        if (isBlack()) {
-//
-//            if (targetPos.getY() - currentPos.getY() > 0) {
-//
-//            }
-//
-//        } else {
-//
-//        }
-//        return returnValue;
-//    }
-//
-//    public boolean someoneWon() {
-//
-//        return false;
-//    }
-//
-//    public Player whoWon() {
-//
-//        return null;
-//    }
 
-    public int getBoardSize() {
-        return boardSize;
+    /**
+     * Checks if the current move between a start and end position is valid,
+     * by checking
+     * [[[INSERT REAL DOC]]]]
+     * if the square delta is 1.
+     *
+     * @param currentPos The current {@link Position} the move starts from
+     * @param targetPos  The target {@link Position} where the move ends
+     * @return {@code true} if the move is valid
+     */
+    private boolean isNormalMoveValid(Position currentPos, Position targetPos) {
+        boolean returnValue = false;
+        Piece currentPiece = board.getPieceFromPosition(currentPos);
+        int curPosX = currentPos.getX();
+        int curPosY = currentPos.getY();
+        int tarPosX = targetPos.getX();
+        int tarPosY = targetPos.getY();
+
+        if (currentPiece.isBlack() && !currentPiece.isCrowned() && ((tarPosY - curPosY) > 0)) {
+            returnValue = true;
+        } else if (!currentPiece.isBlack() && !currentPiece.isCrowned()) {
+            returnValue = true;
+        } else if (currentPiece.isBlack() && currentPiece.isCrowned()) {
+            returnValue = true;
+        } else if (!currentPiece.isBlack() && currentPiece.isCrowned()) {
+            returnValue = true;
+        }
+
+        return returnValue;
     }
 
-    public Piece getPieceFromPosition(Position pos) {
+    /**
+     * Checks if the current {@link Position} is valid. It checks if there is a {@link Piece},
+     * on the current {@link Position} and if the {@link Piece} is from the player whose turn
+     * it is.
+     * @param currentPos The current {@link Position} a move or capture starts from
+     * @return
+     */
+    private boolean isCurrentPositionValid(Position currentPos) {
+
+        return false;
+    }
+
+    /**
+     * Checks if a capture is valid.
+     *
+     * @param currentPos The current {@link Position} the capture starts from
+     * @param targetPos  The target {@link Position} where the capture ends
+     * @return {@code true} if the capture is valid
+     */
+    private boolean isCaptureValid(Position currentPos, Position targetPos) {
+        return false;
+    }
+
+    /**
+     * Executes the move on the board.
+     *
+     * @param currentPos The current {@link Position} the move starts from
+     * @param targetPos  The target {@link Position} where the move ends
+     */
+    private void movePiece(Position currentPos, Position targetPos) {
+        board.movePiece(currentPos, targetPos);
+    }
+
+    /**
+     * Returns the Piece from a given Position.
+     *
+     * @param pos The {@link Position} of the
+     * @return a {@link Piece}
+     */
+    private Piece getPieceFromPosition(Position pos) {
         return board.getPieceFromPosition(pos);
     }
 
-    public boolean isPieceBlack(Piece piece) {
+    /**
+     * Checks if a {@link Piece} is black.
+     *
+     * @param piece The {@link Piece}, which should be checked
+     * @return {@code true} if {@link Piece} is black
+     */
+    private boolean isPieceBlack(Piece piece) {
         return piece.isBlack();
+    }
+
+    /**
+     * Returns the board.
+     *
+     * @return a {@link Board}
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * Returns the selected board size.
+     *
+     * @return The selected board size
+     */
+    public int getBoardSize() {
+        return boardSize;
     }
 
 }
