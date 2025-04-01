@@ -10,6 +10,7 @@ import java.util.List;
 public class Controller {
     private Board board;
     private final int boardSize;
+    private boolean isBlacksTurn;
     private Position firstClickedPos;
     private List<Position> captureQueue;
 
@@ -18,6 +19,7 @@ public class Controller {
         this.captureQueue = new ArrayList<Position>();
 //         Create a new Board
         this.board = new Board(boardSize);
+        this.isBlacksTurn = true;
     }
 
     /**
@@ -63,6 +65,9 @@ public class Controller {
 //                captureQueue.add(currentPos);
 //            }
 //        }
+//
+//        #wip
+//
 //        return 0;
 //    }
 
@@ -78,35 +83,38 @@ public class Controller {
      */
     private boolean isNormalMoveValid(Position currentPos, Position targetPos) {
         boolean returnValue = false;
-        Piece currentPiece = board.getPieceFromPosition(currentPos);
+        Piece currentPiece;
         int curPosX = currentPos.getX();
         int curPosY = currentPos.getY();
         int tarPosX = targetPos.getX();
         int tarPosY = targetPos.getY();
 
-        if (currentPiece.isBlack() && !currentPiece.isCrowned() && ((tarPosY - curPosY) > 0)) {
+//        Check if the current position is valid and the target position is on the board and without a piece on it
+        if (isCurrentPositionValid(currentPos) && isPositionOnBoard(targetPos) && isPositionEmpty(targetPos)) {
+            currentPiece = board.getPieceFromPosition(currentPos);
+        } else {
+            return false;
+        }
+
+//        Check if the conditions are right for the normal move pattern
+//        General condition: pieceColor && crownedStatus && MovePattern + additional checks
+
+//        Piece is black and not crowned
+        if (currentPiece.isBlack() && !currentPiece.isCrowned() && ((tarPosY - curPosY) == 1)
+                && ((tarPosX - curPosX == 1) || (tarPosX - curPosX == -1))) {
             returnValue = true;
-        } else if (!currentPiece.isBlack() && !currentPiece.isCrowned()) {
+
+//        Piece is white and not crowned
+        } else if (!currentPiece.isBlack() && !currentPiece.isCrowned() && (tarPosY - curPosY == -1)
+                && ((tarPosX - curPosX == 1) || (tarPosX - curPosX == -1))) {
             returnValue = true;
-        } else if (currentPiece.isBlack() && currentPiece.isCrowned()) {
-            returnValue = true;
-        } else if (!currentPiece.isBlack() && currentPiece.isCrowned()) {
+
+//        Color of piece doesn't matter and it is crowned
+        } else if (currentPiece.isCrowned() && isTargetPosInCrownedPossibleNormalMovesList(currentPos, targetPos)) {
             returnValue = true;
         }
 
         return returnValue;
-    }
-
-    /**
-     * Checks if the current {@link Position} is valid. It checks if there is a {@link Piece},
-     * on the current {@link Position} and if the {@link Piece} is from the player whose turn
-     * it is.
-     * @param currentPos The current {@link Position} a move or capture starts from
-     * @return
-     */
-    private boolean isCurrentPositionValid(Position currentPos) {
-
-        return false;
     }
 
     /**
@@ -117,7 +125,124 @@ public class Controller {
      * @return {@code true} if the capture is valid
      */
     private boolean isCaptureValid(Position currentPos, Position targetPos) {
+//        #wip
         return false;
+    }
+
+    /**
+     * Checks if the current {@link Position} is valid. It checks if there is a {@link Piece},
+     * on the current {@link Position} and if the {@link Piece} is from the player whose turn
+     * it is.
+     *
+     * @param currentPos The current {@link Position} a move or capture starts from
+     * @return {@code true} if {@link Position} is valid
+     */
+    private boolean isCurrentPositionValid(Position currentPos) {
+        boolean returnValue = false;
+        Piece piece = getPieceFromPosition(currentPos);
+
+        if (isPositionEmpty(currentPos)) {
+            returnValue = false;
+        } else if (!isPositionOnBoard(currentPos)) {
+            returnValue = false;
+        } else if (piece.isBlack() == isBlacksTurn) {
+            returnValue = true;
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * Checks if the provided {@link Position} is in bounds of the generated {@link Board}.
+     *
+     * @param pos The {@link Position} which should be checked
+     * @return {@code true} if the {@link Position} is in bounds of the {@link Board}
+     */
+    private boolean isPositionOnBoard(Position pos) {
+        return board.isPositionOnBoard(pos);
+    }
+
+    /**
+     * Checks if the target {@link Position} is part of the normal move list for a crowned {@link Piece}
+     *
+     * @param currentPos
+     * @param targetPos
+     * @return {@code true} if target {@link Position} is part of the normal move list for the crowned {@link Piece}
+     */
+    private boolean isTargetPosInCrownedPossibleNormalMovesList(Position currentPos, Position targetPos) {
+        ArrayList<Position> crownedPossibleNormalMovesList = createCrownedPossibleNormalMovesList(currentPos);
+
+        for (Position pos : crownedPossibleNormalMovesList) {
+            if (targetPos.equals(pos)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Creates a {@link Position} List which contains all the possible positions a crowned {@link Piece}
+     * can move on from their current {@link Position}.
+     *
+     * @param currentPos The {@link Position} of the crowned {@link Piece} for which the List should be
+     *                   created
+     * @return an {@link ArrayList} wich contains all possible normal moves for the crowned {@link Piece}
+     * on the provided {@link Position}
+     */
+    private ArrayList<Position> createCrownedPossibleNormalMovesList(Position currentPos) {
+        ArrayList<Position> crownedPossibleNormalMovesList = new ArrayList<>();
+        int curPosX = currentPos.getX();
+        int curPosY = currentPos.getY();
+        boolean pieceAtPlusPlus = false;
+        boolean pieceAtPlusMinus = false;
+        boolean pieceAtMinusPlus = false;
+        boolean pieceAtMinusMinus = false;
+
+//        Create list with all possible moves
+        for (int i = 1; i < 30; i++) {
+            Position posXPlusIYPlusI = new Position(curPosX + i, curPosY + i);
+            Position posXPLusIYMinusI = new Position(curPosX + i, curPosY - i);
+            Position posXMinusIYPlusI = new Position(curPosX - i, curPosY + i);
+            Position posXMinusIYMinusI = new Position(curPosX - i, curPosY - i);
+
+//            Position plus plus: upper right diagonal
+            if (isPositionOnBoard(posXPlusIYPlusI) && getPieceFromPosition(posXPlusIYPlusI) == null && !pieceAtPlusPlus) {
+                crownedPossibleNormalMovesList.add(posXPlusIYPlusI);
+            } else if (isPositionOnBoard(posXPlusIYPlusI) && getPieceFromPosition(posXPlusIYPlusI) != null) {
+                pieceAtPlusPlus = true;
+
+//            Position plus minus: lower right diagonal
+            } else if (isPositionOnBoard(posXPLusIYMinusI) && getPieceFromPosition(posXPLusIYMinusI) == null && !pieceAtPlusMinus) {
+                crownedPossibleNormalMovesList.add(posXPLusIYMinusI);
+            } else if (isPositionOnBoard(posXPLusIYMinusI) && getPieceFromPosition(posXPLusIYMinusI) != null) {
+                pieceAtPlusMinus = true;
+
+//            Position minus plus: upper left diagonal
+            } else if (isPositionOnBoard(posXMinusIYPlusI) && getPieceFromPosition(posXMinusIYPlusI) == null && !pieceAtMinusPlus) {
+                crownedPossibleNormalMovesList.add(posXMinusIYPlusI);
+            } else if (isPositionOnBoard(posXMinusIYPlusI) && getPieceFromPosition(posXMinusIYPlusI) != null) {
+                pieceAtMinusPlus = true;
+
+//            Position minus minus: lower left diagonal
+            } else if (isPositionOnBoard(posXMinusIYMinusI) && getPieceFromPosition(posXMinusIYMinusI) == null && !pieceAtMinusMinus) {
+                crownedPossibleNormalMovesList.add(posXMinusIYMinusI);
+            } else if (isPositionOnBoard(posXMinusIYMinusI) && getPieceFromPosition(posXMinusIYMinusI) != null) {
+                pieceAtMinusMinus = true;
+            }
+        }
+
+        return crownedPossibleNormalMovesList;
+    }
+
+    /**
+     * Checks if a {@link Position} is empty, which means it has no {@link Piece} on it.
+     *
+     * @param pos The {@link Position} which gets checked
+     * @return {@code true} when {@link Position} is empty
+     */
+    private boolean isPositionEmpty(Position pos) {
+        return getPieceFromPosition(pos) == null;
     }
 
     /**
@@ -128,15 +253,21 @@ public class Controller {
      */
     private void movePiece(Position currentPos, Position targetPos) {
         board.movePiece(currentPos, targetPos);
+        togglePlayerTurn();
+    }
+
+    private void togglePlayerTurn() {
+        isBlacksTurn = !isBlacksTurn;
     }
 
     /**
-     * Returns the Piece from a given Position.
+     * Returns the {@link Piece} from a given {@link Position}. Returns null if there is no {@link Piece} on the
+     * {@link Position}
      *
-     * @param pos The {@link Position} of the
-     * @return a {@link Piece}
+     * @param pos The {@link Position} where the {@link Piece} is returned from
+     * @return the {@link Piece} from the provided {@link Position}
      */
-    private Piece getPieceFromPosition(Position pos) {
+    public Piece getPieceFromPosition(Position pos) {
         return board.getPieceFromPosition(pos);
     }
 
@@ -146,8 +277,18 @@ public class Controller {
      * @param piece The {@link Piece}, which should be checked
      * @return {@code true} if {@link Piece} is black
      */
-    private boolean isPieceBlack(Piece piece) {
+    public boolean isPieceBlack(Piece piece) {
         return piece.isBlack();
+    }
+
+    /**
+     * Checks if a {@link Piece} is crowned
+     *
+     * @param piece The {@link Piece}, which should be checked
+     * @return {@code true} if {@link Piece} is crowned
+     */
+    public boolean isPieceCrowned(Piece piece) {
+        return piece.isCrowned();
     }
 
     /**
