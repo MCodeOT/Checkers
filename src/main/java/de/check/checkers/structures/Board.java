@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Board {
 
-    private ArrayList<Piece> board;
     private final int size;
+    private ArrayList<Piece> board;
 
     public Board(int size) {
         this.size = size;
@@ -14,15 +14,15 @@ public class Board {
         boolean isBlack = true;
         byte id = 0;
         for (int y = 0; y < size; y++) {
-            int adder=0;
+            int adder = 0;
             if (y == size / 2 - 1) {
                 isBlack = !isBlack;
             }
             for (int x = 0; x < size; x += 2) {
-                if(y%2==0){
-                    adder=0;
+                if (y % 2 == 0) {
+                    adder = 0;
                 } else {
-                    adder=1;
+                    adder = 1;
                 }
                 if (!(y == size / 2 || y == size / 2 - 1)) {
                     Position curPos = new Position(x + adder, y);
@@ -81,13 +81,12 @@ public class Board {
                 break;
             }
         }
-
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for (int y = size-1; y >=0; y--) {
+        for (int y = size - 1; y >= 0; y--) {
             builder.append("|");
             for (int x = 0; x < size; x++) {
                 Position pos = new Position(x, y);

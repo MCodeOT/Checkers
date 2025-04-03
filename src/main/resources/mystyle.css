@@ -4,18 +4,28 @@
     padding: 0;
 }
 
-#container {
-    /*position: relative;*/
+.container {
+    position: absolute;
+    outline: 2px solid #000000;
     display: grid;
     grid-template-columns:  10vh 10vh 10vh 10vh 10vh 10vh 10vh 10vh;
     grid-template-rows:  10vh 10vh 10vh 10vh 10vh 10vh 10vh 10vh;
-
-    margin-left: calc((100vw - 80vh) / 2);
-    margin-top: calc((100vh - 80vh) / 2);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .black {
     background-color: Black;
+    cursor: pointer;
+    user-select: none;
+}
+
+.black_player {
+    width: 10vh;
+    height: 10vh;
+    scale: 0.9;
+    filter: brightness(0) saturate(100%) invert(30%) sepia(5%) saturate(36%) hue-rotate(331deg) brightness(97%) contrast(84%);
     cursor: pointer;
     user-select: none;
 }
@@ -30,6 +40,15 @@
     user-select: none;
 }
 
+.white_player {
+    width: 10vh;
+    height: 10vh;
+    scale: 0.9;
+    filter: brightness(0) saturate(100%) invert(98%) sepia(100%) saturate(2%) hue-rotate(65deg) brightness(111%) contrast(101%);
+    cursor: pointer;
+    user-select: none;
+}
+
 .white:hover {
     background-color: #E3E3E3;
 }
@@ -40,6 +59,12 @@
 
 .active:hover {
     background-color: #719E5F;
+
 }
+.active:active{
+
+}
+/*smooth-spot für Animationen: 0.3s */
+
 
 

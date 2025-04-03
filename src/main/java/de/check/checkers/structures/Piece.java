@@ -1,8 +1,5 @@
 package de.check.checkers.structures;
 
-import de.check.checkers.structures.Position;
-
-
 public class Piece {
     private boolean isBlack;
     private boolean isCrowned;
@@ -35,19 +32,19 @@ public class Piece {
         this.currentPosition = currentPosition;
     }
 
-    public String toString(){
-        StringBuilder sb=new StringBuilder();
-        if(isBlack){
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (isBlack) {
             sb.append("B");
-        }else{
+        } else {
             sb.append("W");
         }
-        if(isCrowned){
+        if (isCrowned) {
             sb.append("C");
-        }else{
+        } else {
             sb.append(" ");
         }
-        if(id<10){
+        if (id < 10) {
             sb.append("0");
         }
         sb.append(id);

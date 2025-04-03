@@ -4,6 +4,7 @@ import de.check.checkers.structures.Board;
 import de.check.checkers.structures.Piece;
 import de.check.checkers.structures.Position;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,48 +29,53 @@ public class Controller {
      * @param currentPos The current clicked {@link Position}
      * @return {@code int} code depedant on the successfulness of the move
      */
-//    public int handlePositionTransmission(Position currentPos) {
-//        if (!isPositionValid()) return -1;
-//
-//        // Return fitting style int code.
-//        // Example: return 1 :: move successful
-//        // Check if something was selected before
-//        //      If not:
-//        //          firstClickedPos is the current clicked position
-//        //      Else:
-//        //          If the current pos is the previously saved pos:
-//        //              Remove the selection
-//        //              Return unhighlight code
-//        //          Else:
-//        //              Handle second click, validate the move, move
-//        // Überprüfe Capture Zwang
-//
-//
-//        if (firstClickedPos != null) {
-//            if (currentPos == firstClickedPos) {
-//                firstClickedPos = null;
-//                // return unhighlight code
-//            } else {
-//                if (getPieceFromPosition(currentPos) == null) {
-//                    if (isNormalMoveValid(firstClickedPos, currentPos)) {
-//                        movePiece(firstClickedPos, currentPos);
-//                    } else if (isCaptureValid()) {
-//                        captureQueue.add(currentPos);
-//                    }
-//                    /* ALARM! DANGEROUS CODE AT RUNTIME LEVEL EXECUTION ERROR */
-//                    firstClickedPos = null;
-//                }
-//            }
-//        }else{
-//            if(getPieceFromPosition(currentPos)!=null){
-//                captureQueue.add(currentPos);
-//            }
-//        }
-//
-//        #wip
-//
-//        return 0;
-//    }
+    public int handlePositionTransmission(Position currentPos) {
+        int returnValue = 0;
+
+        if (!isCurrentPositionValid(currentPos) && firstClickedPos != null) return 2;
+
+        // Return fitting style int code.
+        // Example: return 1 :: move successful
+        // Check if something was selected before
+        //      If not:
+        //          firstClickedPos is the current clicked position
+        //      Else:
+        //          If the current pos is the previously saved pos:
+        //              Remove the selection
+        //              Return unhighlight code
+        //          Else:
+        //              Handle second click, validate the move, move
+        // Überprüfe Capture Zwang
+
+
+        if (firstClickedPos != null) {
+            if (currentPos.getX() == firstClickedPos.getX() && currentPos.getY() == firstClickedPos.getY()) {
+                firstClickedPos = null;
+                returnValue = 1;
+                return returnValue;
+            } else {
+                if (getPieceFromPosition(currentPos) == null) {
+                    if (isNormalMoveValid(firstClickedPos, currentPos)) {
+                        movePiece(firstClickedPos, currentPos);
+                        returnValue = 10;
+                        return returnValue;
+                    } else if (isCaptureValid(firstClickedPos, currentPos)) {
+                        captureQueue.add(currentPos);
+                    }
+                    /* ALARM! DANGEROUS CODE AT RUNTIME LEVEL EXECUTION ERROR */
+                    firstClickedPos = null;
+                }
+            }
+        }else{
+            if(getPieceFromPosition(currentPos)!=null){
+                captureQueue.add(currentPos);
+                firstClickedPos = currentPos;
+                returnValue = 30;
+                return returnValue;
+            }
+        }
+        return returnValue;
+    }
 
     /**
      * Checks if the current move between a start and end position is valid,
