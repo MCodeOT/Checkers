@@ -1,6 +1,7 @@
 package de.check.checkers.utils;
 
 import de.check.checkers.structures.Board;
+import de.check.checkers.structures.PTC;
 import de.check.checkers.structures.Piece;
 import de.check.checkers.structures.Position;
 
@@ -38,35 +39,18 @@ public class Controller {
      * @return {@code int} code depedant on the successfulness of the move
      */
     public int handlePositionTransmission(Position currentPos) {
-        int returnValue = 0;
-
-        if (!isCurrentPositionValid(currentPos) && firstClickedPos != null) return 2;
-
-        // Return fitting style int code.
-        // Example: return 1 :: move successful
-        // Check if something was selected before
-        //      If not:
-        //          firstClickedPos is the current clicked position
-        //      Else:
-        //          If the current pos is the previously saved pos:
-        //              Remove the selection
-        //              Return unhighlight code
-        //          Else:
-        //              Handle second click, validate the move, move
-        // Überprüfe Capture Zwang
-
-
+        if(isPieceBlack(getPieceFromPosition(currentPos)) != isBlacksTurn) {
+            return PTC.FAILURE_WRONG_PLAYER_SELECTED.ordinal();
+        }
         if (firstClickedPos != null) {
             if (currentPos.getX() == firstClickedPos.getX() && currentPos.getY() == firstClickedPos.getY()) {
                 firstClickedPos = null;
-                returnValue = 1;
-                return returnValue;
+                return PTC.FAILURE_BOTH_POSITIONS_IDENTICAL.ordinal();
             } else {
                 if (getPieceFromPosition(currentPos) == null) {
                     if (isNormalMoveValid(firstClickedPos, currentPos)) {
                         movePiece(firstClickedPos, currentPos);
-                        returnValue = 10;
-                        return returnValue;
+                        return PTC.SUCCESSFUL_GENERIC_AVAILABLE_MOVE.ordinal();
                     } else if (isCaptureValid(firstClickedPos, currentPos)) {
                         captureQueue.add(currentPos);
                     }
@@ -78,11 +62,10 @@ public class Controller {
             if(getPieceFromPosition(currentPos)!=null){
                 captureQueue.add(currentPos);
                 firstClickedPos = currentPos;
-                returnValue = 30;
-                return returnValue;
+                return PTC.SUCCESSFUL_FIRST_CLICK.ordinal();
             }
         }
-        return returnValue;
+        return PTC.FAILURE_GENERIC_UNAVAILABLE_MOVE.ordinal();
     }
 
     /**
@@ -157,9 +140,14 @@ public class Controller {
 
         if (isPositionEmpty(currentPos)) {
             returnValue = false;
-        } else if (!isPositionOnBoard(currentPos)) {
+        }
+        if (!isPositionOnBoard(currentPos)) {
             returnValue = false;
-        } else if (piece.isBlack() == isBlacksTurn) {
+        }
+        if (piece.isBlack() == isBlacksTurn) {
+            returnValue = true;
+        }
+        if(!piece.isBlack() == !isBlacksTurn) {
             returnValue = true;
         }
 

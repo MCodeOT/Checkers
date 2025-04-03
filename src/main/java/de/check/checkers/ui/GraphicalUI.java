@@ -1,5 +1,6 @@
 package de.check.checkers.ui;
 
+import de.check.checkers.structures.Board;
 import de.check.checkers.structures.Position;
 import de.check.checkers.utils.Controller;
 import javafx.application.Platform;
@@ -83,16 +84,20 @@ public class GraphicalUI extends Scene {
             return controller.isPieceBlack(controller.getPieceFromPosition(new Position(x, y)));
         }
 
+        /**
+         * <b>Takes the currently clicked position, converts it to a 2 dimensional and decides, depending on the returned code form the controller, what JS-Method should be called</b>
+         * @param current1DPos current 1 dimensional position of the clicked piece
+         */
         public void getActionFromController(int current1DPos) {
             Position currentPos = convertToPosition(current1DPos);
             int actionCode = controller.handlePositionTransmission(currentPos);
-
+            System.out.println(actionCode);
             switch (actionCode) {
                 case 0:
                     break;
                 case 1:
                     System.out.println("Case 1: " + actionCode);
-                    callJavaScript("removeHighlightFromClickedPiece", current1DPos);
+                    callJavaScript("removeHighlightFromClickedPiece");
                     break;
                 case 2:
                     break;
@@ -102,15 +107,15 @@ public class GraphicalUI extends Scene {
                     break;
                 case 5:
                     break;
+                case 7:
+                    System.out.println("Case 7: " + actionCode);
+                    callJavaScript("addHighlightToClickedPiece");
+                    break;
                 case 10:
                     break;
                 case 11:
                     break;
                 case 12:
-                    break;
-                case 30:
-                    System.out.println("Case 30: " + actionCode);
-                    callJavaScript("addHighlightToClickedPiece", current1DPos);
                     break;
                 case 100:
                     break;
@@ -119,7 +124,22 @@ public class GraphicalUI extends Scene {
         }
 
         public void copyBoard() {
-
+            Board board = controller.getBoard();
+            for(int y = 0; y<getBoardSize(); y++){
+                for(int x = 0; x<getBoardSize(); x++){
+                    if(board.getPieceFromPosition(new Position(x, y)) != null){
+                        if(isPieceBlack(x, y)){
+                            callJavaScript("createBlackPiece", convertToOneDimensional(x, y));
+                        }else{
+                            callJavaScript("createWhitePiece", convertToOneDimensional(x, y));
+                        }
+                    }else{
+                        if(board.getPieceFromPosition(new Position(x, y)) == null){
+                            callJavaScript("removePiece", convertToOneDimensional(x, y));
+                        }
+                    }
+                }
+            }
         }
 
         /**
