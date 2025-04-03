@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
+    private static boolean instance;
     private Board board;
     private final int boardSize;
     private boolean isBlacksTurn;
@@ -15,6 +16,13 @@ public class Controller {
     private List<Position> captureQueue;
 
     public Controller(int boardSize) {
+
+        if (!instance) {
+            instance = true;
+        } else {
+            System.exit(1);
+        }
+
         this.boardSize = boardSize;
         this.captureQueue = new ArrayList<Position>();
 //         Create a new Board
