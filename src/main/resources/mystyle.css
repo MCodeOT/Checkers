@@ -15,10 +15,14 @@
     transform: translate(-50%, -50%);
 }
 
-.black {
-    background-color: Black;
+.baseField {
     cursor: pointer;
     user-select: none;
+    position: relative;
+}
+
+.black {
+    background-color: Black;
 }
 
 .black_player {
@@ -36,8 +40,6 @@
 
 .white {
     background-color: white;
-    cursor: pointer;
-    user-select: none;
 }
 
 .white_player {
@@ -59,12 +61,39 @@
 
 .active:hover {
     background-color: #719E5F;
-
 }
-.active:active{
 
+.active:active {
+    /* Add styles for active state if needed */
 }
-/*smooth-spot für Animationen: 0.3s */
 
+.errorHighlight {
+    position: relative; /* Ensure it is positioned relative to its parent */
+}
 
+.errorHighlight::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(194, 76, 76, 1);
+    opacity: 0; /* Start with no visibility */
+    animation: fadeInOut 1s ease-in-out; /* Adjust duration and iteration as needed */
+    pointer-events: none; /* Prevent interaction with the overlay */
+}
 
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* smooth-spot für Animationen: 0.3s */

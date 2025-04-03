@@ -29,7 +29,9 @@ function load_Board() {
         for (let col = 0; col < fieldSize; col++) {
             field = document.createElement('div');
 
+            field.classList.add('baseField');
             field.classList.add((row + col) % 2 === 0 ? 'black' : 'white');
+
 
             field.dataset.x = col;
             field.dataset.y = row;
@@ -128,6 +130,14 @@ function addHighlightToClickedPiece() {
 
 function removeHighlightFromClickedPiece(){
     document.querySelector('.active').classList.remove('active');
+}
+
+function errorHighlight(){
+    field.classList.add('errorHighlight');
+
+    setTimeout(()=>{
+        field.classList.add('errorHighlight');
+    },600);
 }
 
 function convertToOneDimensional(x, y){

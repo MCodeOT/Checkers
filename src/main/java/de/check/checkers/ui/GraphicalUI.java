@@ -102,6 +102,8 @@ public class GraphicalUI extends Scene {
                 case 2:
                     break;
                 case 3:
+                    System.out.println("Case 3: " + actionCode);
+                    callJavaScript("errorHighlight");
                     break;
                 case 4:
                     break;
