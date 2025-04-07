@@ -8,11 +8,7 @@ public class Board {
     private ArrayList<Piece> board;
     private int size;
 
-    private Board() {
-        if (this != instance) {
-            throw new RuntimeException("\n\nThere can only exist one Board object. Use Controller to access the board\n");
-        }
-    }
+    private Board() {}
 
     public static Board getInstance() {
         return instance;
