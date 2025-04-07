@@ -46,7 +46,7 @@ public class GraphicalUI extends Scene {
         webEngine.load(url.toExternalForm());
         webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
-                controller = new Controller(8);
+//                controller = new Controller(8);
                 window = (JSObject) webEngine.executeScript("window");
                 window.setMember("java", new JavaFXInterface());
             }

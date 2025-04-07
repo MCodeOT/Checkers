@@ -3,11 +3,22 @@ package de.check.checkers.structures;
 import java.util.ArrayList;
 
 public class Board {
+    private static final Board instance = new Board();
 
-    private final int size;
     private ArrayList<Piece> board;
+    private int size;
 
-    public Board(int size) {
+    private Board() {
+        if (this != instance) {
+            throw new RuntimeException("\n\nThere can only exist one Board object. Use Controller to access the board\n");
+        }
+    }
+
+    public static Board getInstance() {
+        return instance;
+    }
+
+    public void createBoard(int size) {
         this.size = size;
         this.board = new ArrayList<Piece>();
 
@@ -81,6 +92,7 @@ public class Board {
                 break;
             }
         }
+
     }
 
     @Override
