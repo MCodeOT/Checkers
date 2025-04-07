@@ -5,25 +5,27 @@ public class Position {
     private int x;
     private int y;
 
-    public Position(int x, int y){
+    public Position(int x, int y) {
 
-        this.x=x;
-        this.y=y;
+        this.x = x;
+        this.y = y;
     }
 
-    public int getX(){
+    public int getX() {
         return this.x;
     }
-    public int getY(){
+
+    public int getY() {
         return this.y;
     }
 
+
     @Override
-    public boolean equals(Object object){
-        if(object instanceof Position){
-            Position pos=(Position)object;
-            if(this.x==pos.getX()){
-                if(this.y==pos.getY()){
+    public boolean equals(Object object) {
+        if (object instanceof Position) {
+            Position pos = (Position) object;
+            if (this.x == pos.getX()) {
+                if (this.y == pos.getY()) {
                     return true;
                 }
             }
