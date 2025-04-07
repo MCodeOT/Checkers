@@ -19,9 +19,6 @@ public class Controller {
     private List<Position> captureQueue;
 
     private Controller() {
-        if (this != instance) {
-            throw new RuntimeException("\n\nThere can only exist one Controller object. Use Controller.getInstance() instead.\n");
-        }
         this.captureQueue = new ArrayList<Position>();
         this.isBlacksTurn = true;
     }
