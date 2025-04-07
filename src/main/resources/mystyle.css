@@ -80,7 +80,7 @@
     height: 100%;
     background-color: rgba(194, 76, 76, 1);
     opacity: 0; /* Start with no visibility */
-    animation: fadeInOut 1s ease-in-out; /* Adjust duration and iteration as needed */
+    animation: fadeInOut 0.3s ease-in-out; /* Adjust duration and iteration as needed */
     pointer-events: none; /* Prevent interaction with the overlay */
 }
 

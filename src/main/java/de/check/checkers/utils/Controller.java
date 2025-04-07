@@ -34,39 +34,50 @@ public class Controller {
     }
 
     /**
-     * Handles the current click.
+     * Handles the current click and transmits the corresponding code to the Graphical-UI
      *
      * @param currentPos The current clicked {@link Position}
      * @return {@code int} code dependent on the successfulness of the move
      */
-    public int handlePositionTransmission(Position currentPos) {
-        if(isPieceBlack(getPieceFromPosition(currentPos)) != isBlacksTurn) {
-            return PTC.FAILURE_WRONG_PLAYER_SELECTED.ordinal();
-        }
+    public PTC handlePositionTransmission(Position currentPos) {
+        // Is there already a selected piece?
         if (firstClickedPos != null) {
+            // If there is a selected piece, the currently clicked the same piece?
             if (currentPos.getX() == firstClickedPos.getX() && currentPos.getY() == firstClickedPos.getY()) {
                 firstClickedPos = null;
-                return PTC.FAILURE_BOTH_POSITIONS_IDENTICAL.ordinal();
+                return PTC.FAILURE_BOTH_POSITIONS_IDENTICAL;
             } else {
+                //is the second click on an empty field?
                 if (getPieceFromPosition(currentPos) == null) {
+                    // is a normal move valid?
                     if (isNormalMoveValid(firstClickedPos, currentPos)) {
                         movePiece(firstClickedPos, currentPos);
-                        return PTC.SUCCESSFUL_GENERIC_AVAILABLE_MOVE.ordinal();
+                        firstClickedPos = null;
+                        return PTC.SUCCESSFUL_GENERIC_AVAILABLE_MOVE;
+                        //is a capture valid for the capture queue
                     } else if (isCaptureValid(firstClickedPos, currentPos)) {
-                        captureQueue.add(currentPos);
+//                        captureQueue.add(currentPos); #wip
+                        return PTC.SUCCESSFUL_CAPTURE_ADDED_TO_QUEUE;
                     }
-                    /* ALARM! DANGEROUS CODE AT RUNTIME LEVEL EXECUTION ERROR */
-                    firstClickedPos = null;
                 }
             }
-        }else{
-            if(getPieceFromPosition(currentPos)!=null){
-                captureQueue.add(currentPos);
+        } else {
+            // is the selected piece the color of the moving player?
+            if (isPieceBlack(getPieceFromPosition(currentPos)) != isBlacksTurn) {
+                return PTC.FAILURE_WRONG_PLAYER_SELECTED;
+            }
+            // is there a piece on the field for the first click?
+            if (getPieceFromPosition(currentPos) != null) {
+//                captureQueue.add(currentPos); #wip
                 firstClickedPos = currentPos;
-                return PTC.SUCCESSFUL_FIRST_CLICK.ordinal();
+                return PTC.SUCCESSFUL_FIRST_CLICK;
+            }
+            // there is no piece to select for the first click
+            if (getPieceFromPosition(currentPos) == null) {
+                return PTC.FAILURE_NO_PIECE_ON_FIELD;
             }
         }
-        return PTC.FAILURE_GENERIC_UNAVAILABLE_MOVE.ordinal();
+        return PTC.FAILURE_GENERIC_UNAVAILABLE_MOVE;
     }
 
     /**
@@ -99,12 +110,12 @@ public class Controller {
 
 //        Piece is black and not crowned
         if (currentPiece.isBlack() && !currentPiece.isCrowned() && ((tarPosY - curPosY) == 1)
-                && ((tarPosX - curPosX == 1) || (tarPosX - curPosX == -1))) {
+                && (Math.abs(tarPosX - curPosX) == 1)) {
             returnValue = true;
 
 //        Piece is white and not crowned
         } else if (!currentPiece.isBlack() && !currentPiece.isCrowned() && (tarPosY - curPosY == -1)
-                && ((tarPosX - curPosX == 1) || (tarPosX - curPosX == -1))) {
+                && (Math.abs(tarPosX - curPosX) == 1)) {
             returnValue = true;
 
 //        Color of piece doesn't matter and it is crowned
@@ -148,7 +159,7 @@ public class Controller {
         if (piece.isBlack() == isBlacksTurn) {
             returnValue = true;
         }
-        if(!piece.isBlack() == !isBlacksTurn) {
+        if (!piece.isBlack() == !isBlacksTurn) {
             returnValue = true;
         }
 

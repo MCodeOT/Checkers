@@ -1,7 +1,7 @@
 let fieldSize;
 let field;
 let previousField;
-const fieldArr=[];
+const fieldArr = [];
 
 let curX, curY, tarX, tarY;
 let selectedPiece;
@@ -21,7 +21,7 @@ window.onload = waitForJava;
  */
 function load_Board() {
 
-   fieldSize = window.java.getBoardSize();
+    fieldSize = window.java.getBoardSize();
 //     fieldSize = 8;
 
     const container = document.querySelector('.container');
@@ -50,7 +50,13 @@ function load_Board() {
 function copyBoard() {
     window.java.copyBoard();
 }
-function createPiece(current1dPos, pieceColor){
+
+/**
+ * **Creates a piece of the corresponding color on the given field**
+ * @param current1dPos one dimensional position of the piece that will be added
+ * @param pieceColor color of the piece that will be added
+ */
+function createPiece(current1dPos, pieceColor) {
     const position = convertToTwoDimensional(current1dPos);
     const pieces = document.createElement('img'); // <img>
     pieces.src = "img/draughts.svg";
@@ -59,33 +65,44 @@ function createPiece(current1dPos, pieceColor){
     const coordX = position.x;
     const coordY = position.y;
 
-    document.querySelector('.container').querySelectorAll('*').forEach(element=>{
-        if(parseInt(element.dataset.x) === coordX && parseInt(element.dataset.y) === coordY){
+    document.querySelector('.container').querySelectorAll('*').forEach(element => {
+        if (parseInt(element.dataset.x) === coordX && parseInt(element.dataset.y) === coordY) {
             element.innerHTML = '';
             element.appendChild(pieces);
         }
     });
 }
-function createBlackPiece(current1dPos){
+
+/**
+ * **Method called from Java and directing to the createPiece-Method with colour of the piece, that will be added**
+ * @param current1dPos one dimensional position of the piece that will be added
+ * @see createPiece
+ */
+function createBlackPiece(current1dPos) {
     createPiece(current1dPos, "black_player");
 }
-
-function createWhitePiece(current1dPos){
+/**
+ * **Method called from Java to create a white piece**
+ * @param current1dPos one dimensional position of the piece that will be added
+ * @see createPiece
+ */
+function createWhitePiece(current1dPos) {
     createPiece(current1dPos, "white_player")
 }
 
-function removePiece(current1dPos){
+function removePiece(current1dPos) {
     const position = convertToTwoDimensional(current1dPos);
     const coordX = position.x;
     const coordY = position.y;
 
-    document.querySelector('.container').querySelectorAll('*').forEach(element=>{
-        if(parseInt(element.dataset.x) === coordX && parseInt(element.dataset.y) === coordY){
+    document.querySelector('.container').querySelectorAll('*').forEach(element => {
+        if (parseInt(element.dataset.x) === coordX && parseInt(element.dataset.y) === coordY) {
             element.innerHTML = '';
         }
     });
 
 }
+
 /**
  * **Makes a callback to the GraphicalUI class in Java, to check if there is a piece is at the given position**
  * @param x coordinate
@@ -116,9 +133,10 @@ function isPieceAtPositionBlack(x, y) {
  *
  * @param currentField
  */
-function isClicked(currentField){
+function isClicked(currentField) {
     previousField = field;
     field = currentField;
+    window.java.printShit(field.dataset.x + " " + field.dataset.y);
     if (window.java) {
         window.java.getActionFromController(convertToOneDimensional(field.dataset.x, field.dataset.y));
     }
@@ -128,24 +146,24 @@ function addHighlightToClickedPiece() {
     field.classList.add('active');
 }
 
-function removeHighlightFromClickedPiece(){
+function removeHighlightFromClickedPiece() {
     document.querySelector('.active').classList.remove('active');
 }
 
-function errorHighlight(){
-    field.classList.add('errorHighlight');
-
-    setTimeout(()=>{
+function errorHighlight() {
+    setTimeout(() => {
         field.classList.add('errorHighlight');
-    },600);
+    }, 100);
+    field.classList.remove('errorHighlight');
 }
 
-function convertToOneDimensional(x, y){
+function convertToOneDimensional(x, y) {
     x = parseInt(x);
     y = parseInt(y);
     return y * fieldSize + x;
 }
-function convertToTwoDimensional(i){
+
+function convertToTwoDimensional(i) {
     return {
         x: (parseInt(i % fieldSize)),
         y: (parseInt(i / fieldSize))
