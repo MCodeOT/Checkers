@@ -2,6 +2,8 @@ package de.check.checkers;
 
 
 import de.check.checkers.structures.Board;
+import de.check.checkers.structures.Position;
+import de.check.checkers.utils.Controller;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -18,7 +20,7 @@ import de.check.checkers.ui.GraphicalUI;
 
 import netscape.javascript.JSObject;
 
-public class App extends Application{
+public class App extends Application {
 
     private GraphicalUI graphicalUI;
 
@@ -33,8 +35,19 @@ public class App extends Application{
 
     public static void main(String[] args) {
         //launch();
-        Board board1= new Board(8);
-        System.out.println(board1);
+
+
+
+
+
+//        Controller c = new Controller();
+//        System.out.println(c.getBoardSize());
+
+//        Position currentPos = new Position(0, 2);
+//        Position targetPos = new Position(1, 3);
+
+//        c.movePiece(currentPos, targetPos);
+//        System.out.println(c.getBoard());
 
 
     }

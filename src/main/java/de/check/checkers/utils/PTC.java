@@ -1,4 +1,4 @@
-package de.check.checkers.structures;
+package de.check.checkers.utils;
 
 // PTC stands for PositionTransmissionCode
 public enum PTC {

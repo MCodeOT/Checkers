@@ -8,33 +8,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private static boolean instance;
+    private static final Controller instance = new Controller();
+
     private Board board;
-    private final int boardSize;
+    private int boardSize;
     private boolean isBlacksTurn;
     private Position firstClickedPos;
     private List<Position> captureQueue;
 
-    public Controller(int boardSize) {
-
-        if (!instance) {
-            instance = true;
-        } else {
-            System.exit(1);
+    private Controller() {
+        if (this != instance) {
+            throw new RuntimeException("\n\nThere can only exist one Controller object. Use Controller.getInstance() instead.\n");
         }
-
-        this.boardSize = boardSize;
         this.captureQueue = new ArrayList<Position>();
-//         Create a new Board
-        this.board = new Board(boardSize);
         this.isBlacksTurn = true;
+    }
+
+    public static Controller getInstance() {
+        return instance;
+    }
+
+    public void setBoardSize(int boardSize) {
+        this.boardSize = boardSize;
+        this.board = Board.getInstance();
+        this.board.createBoard(boardSize);
     }
 
     /**
      * Handles the current click.
      *
      * @param currentPos The current clicked {@link Position}
-     * @return {@code int} code depedant on the successfulness of the move
+     * @return {@code int} code dependent on the successfulness of the move
      */
 //    public int handlePositionTransmission(Position currentPos) {
 //        if (!isPositionValid()) return -1;
