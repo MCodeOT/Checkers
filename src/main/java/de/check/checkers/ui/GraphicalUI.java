@@ -1,6 +1,7 @@
 package de.check.checkers.ui;
 
 import de.check.checkers.structures.Board;
+import de.check.checkers.utils.PTC;
 import de.check.checkers.structures.Position;
 import de.check.checkers.utils.Controller;
 import javafx.application.Platform;
@@ -19,14 +20,20 @@ import java.net.URL;
  * <b>Class for </b>
  */
 public class GraphicalUI extends Scene {
+    private static final GraphicalUI instance = new GraphicalUI(new StackPane());
+    private JavaFXInterface javaFXInterface = new JavaFXInterface();
+
 
     private WebEngine webEngine;
     private JSObject window;
     private Controller controller;
 
-    public GraphicalUI(Parent root) {
+    private GraphicalUI(Parent root) {
         super(root);
         checkerBoard();
+    }
+    public static GraphicalUI getInstance() {
+        return instance;
     }
 
     /**
@@ -36,6 +43,7 @@ public class GraphicalUI extends Scene {
      */
     private void checkerBoard() {
         WebView browser = new WebView();
+
         webEngine = browser.getEngine();
 
         URL url = GraphicalUI.class.getResource("/Checkers.html");
@@ -46,9 +54,10 @@ public class GraphicalUI extends Scene {
         webEngine.load(url.toExternalForm());
         webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
-                controller = new Controller(8);
+                controller = Controller.getInstance();
+                controller.setBoardSize(8);
                 window = (JSObject) webEngine.executeScript("window");
-                window.setMember("java", new JavaFXInterface());
+                window.setMember("java", javaFXInterface);
             }
         });
         VBox vbox = new VBox(browser);
@@ -86,40 +95,38 @@ public class GraphicalUI extends Scene {
 
         /**
          * <b>Takes the currently clicked position, converts it to a 2 dimensional and decides, depending on the returned code form the controller, what JS-Method should be called</b>
+         *
          * @param current1DPos current 1 dimensional position of the clicked piece
          */
         public void getActionFromController(int current1DPos) {
             Position currentPos = convertToPosition(current1DPos);
-            int actionCode = controller.handlePositionTransmission(currentPos);
-            System.out.println(actionCode);
-            switch (actionCode) {
-                case 0:
+            System.out.println("Java-Position: " + currentPos.getX() + " " + currentPos.getY());
+            PTC actionMessage = controller.handlePositionTransmission(currentPos);
+            switch (actionMessage) {
+                case PTC.FAILURE_GENERIC_UNAVAILABLE_MOVE:
                     break;
-                case 1:
-                    System.out.println("Case 1: " + actionCode);
+                case PTC.FAILURE_BOTH_POSITIONS_IDENTICAL:
+                    System.out.println(PTC.FAILURE_GENERIC_UNAVAILABLE_MOVE.ordinal() + ": " + actionMessage);
                     callJavaScript("removeHighlightFromClickedPiece");
                     break;
-                case 2:
-                    break;
-                case 3:
-                    System.out.println("Case 3: " + actionCode);
+                case PTC.FAILURE_NO_PIECE_ON_FIELD:
+                    System.out.println(PTC.FAILURE_NO_PIECE_ON_FIELD.ordinal() + ": " + actionMessage);
                     callJavaScript("errorHighlight");
                     break;
-                case 4:
+                case PTC.FAILURE_WRONG_PLAYER_SELECTED:
+                    System.out.println(PTC.FAILURE_WRONG_PLAYER_SELECTED.ordinal() + ": " + actionMessage);
+                    callJavaScript("errorHighlight");
                     break;
-                case 5:
+                case PTC.SUCCESSFUL_GENERIC_AVAILABLE_MOVE:
+                    System.out.println(PTC.SUCCESSFUL_GENERIC_AVAILABLE_MOVE.ordinal() + ": " + actionMessage);
+                    callJavaScript("copyBoard");
+                    callJavaScript("removeHighlightFromClickedPiece");
+                    callJavaScript("addPositionToSidebar");
+
                     break;
-                case 7:
-                    System.out.println("Case 7: " + actionCode);
+                case PTC.SUCCESSFUL_FIRST_CLICK:
+                    System.out.println(PTC.SUCCESSFUL_FIRST_CLICK.ordinal() + ": " + actionMessage);
                     callJavaScript("addHighlightToClickedPiece");
-                    break;
-                case 10:
-                    break;
-                case 11:
-                    break;
-                case 12:
-                    break;
-                case 100:
                     break;
                 default:
             }
@@ -127,16 +134,16 @@ public class GraphicalUI extends Scene {
 
         public void copyBoard() {
             Board board = controller.getBoard();
-            for(int y = 0; y<getBoardSize(); y++){
-                for(int x = 0; x<getBoardSize(); x++){
-                    if(board.getPieceFromPosition(new Position(x, y)) != null){
-                        if(isPieceBlack(x, y)){
+            for (int y = 0; y < getBoardSize(); y++) {
+                for (int x = 0; x < getBoardSize(); x++) {
+                    if (board.getPieceFromPosition(new Position(x, y)) != null) {
+                        if (isPieceBlack(x, y)) {
                             callJavaScript("createBlackPiece", convertToOneDimensional(x, y));
-                        }else{
+                        } else {
                             callJavaScript("createWhitePiece", convertToOneDimensional(x, y));
                         }
-                    }else{
-                        if(board.getPieceFromPosition(new Position(x, y)) == null){
+                    } else {
+                        if (board.getPieceFromPosition(new Position(x, y)) == null) {
                             callJavaScript("removePiece", convertToOneDimensional(x, y));
                         }
                     }
@@ -167,6 +174,7 @@ public class GraphicalUI extends Scene {
             int y = i / controller.getBoardSize();
             return new Position(x, y);
         }
+
         /**
          * <b>Calls the controller to fetch the boardsize</b>
          *
