@@ -21,6 +21,8 @@ import java.net.URL;
  */
 public class GraphicalUI extends Scene {
     private static final GraphicalUI instance = new GraphicalUI(new StackPane());
+    private JavaFXInterface javaFXInterface = new JavaFXInterface();
+
 
     private WebEngine webEngine;
     private JSObject window;
@@ -41,6 +43,7 @@ public class GraphicalUI extends Scene {
      */
     private void checkerBoard() {
         WebView browser = new WebView();
+
         webEngine = browser.getEngine();
 
         URL url = GraphicalUI.class.getResource("/Checkers.html");
@@ -54,7 +57,7 @@ public class GraphicalUI extends Scene {
                 controller = Controller.getInstance();
                 controller.setBoardSize(8);
                 window = (JSObject) webEngine.executeScript("window");
-                window.setMember("java", new JavaFXInterface());
+                window.setMember("java", javaFXInterface);
             }
         });
         VBox vbox = new VBox(browser);
@@ -118,6 +121,8 @@ public class GraphicalUI extends Scene {
                     System.out.println(PTC.SUCCESSFUL_GENERIC_AVAILABLE_MOVE.ordinal() + ": " + actionMessage);
                     callJavaScript("copyBoard");
                     callJavaScript("removeHighlightFromClickedPiece");
+                    callJavaScript("addPositionToSidebar");
+
                     break;
                 case PTC.SUCCESSFUL_FIRST_CLICK:
                     System.out.println(PTC.SUCCESSFUL_FIRST_CLICK.ordinal() + ": " + actionMessage);
