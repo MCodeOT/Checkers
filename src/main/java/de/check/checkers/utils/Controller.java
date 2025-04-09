@@ -1,11 +1,9 @@
 package de.check.checkers.utils;
 
 import de.check.checkers.structures.Board;
-import de.check.checkers.utils.PTC;
 import de.check.checkers.structures.Piece;
 import de.check.checkers.structures.Position;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +51,9 @@ public class Controller {
                     if (isNormalMoveValid(firstClickedPos, currentPos)) {
                         movePiece(firstClickedPos, currentPos);
                         firstClickedPos = null;
+                        if (isPieceOnPositionNowCrowned(currentPos)) {
+                            makePieceOnPositionCrowned(currentPos);
+                        }
                         return PTC.SUCCESSFUL_GENERIC_AVAILABLE_MOVE;
                         //is a capture valid for the capture queue
                     } else if (isCaptureValid(firstClickedPos, currentPos)) {
@@ -82,9 +83,8 @@ public class Controller {
 
     /**
      * Checks if the current move between a start and end position is valid,
-     * by checking
-     * [[[INSERT REAL DOC]]]]
-     * if the square delta is 1.
+     * by checking if the square delta is 1 for normal pieces. For crowned Pieces
+     * it checks if the target {@link Position} is in the crowned possible normal moves list.
      *
      * @param currentPos The current {@link Position} the move starts from
      * @param targetPos  The target {@link Position} where the move ends
@@ -272,6 +272,32 @@ public class Controller {
 
     private void togglePlayerTurn() {
         isBlacksTurn = !isBlacksTurn;
+    }
+
+    private boolean isPieceOnPositionNowCrowned(Position pos) {
+        boolean returnValue = false;
+        Piece piece;
+
+//        Return false if position is empty
+        if (isPositionEmpty(pos))
+            return false;
+
+        piece = getPieceFromPosition(pos);
+
+//        Piece is black and not crowned and in the highest numbered row
+        if (isPieceBlack(piece) && !isPieceCrowned(piece) && pos.getY() == boardSize - 1) {
+            returnValue = true;
+
+//        Piece is white and not crowned and in the lowest numbered row
+        } else if (!isPieceBlack(piece) && !isPieceCrowned(piece) && pos.getY() == 0) {
+            returnValue = true;
+        }
+
+        return returnValue;
+    }
+
+    private void makePieceOnPositionCrowned(Position pos) {
+        board.makePieceOnPositionCrowned(pos);
     }
 
     /**
