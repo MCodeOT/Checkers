@@ -52,9 +52,9 @@ public class Board {
     public Piece getPieceFromPosition(Position pos) {
         Piece returnValue = null;
 
-        for (int i = 0; i < board.size(); i++) {
-            if (pos.equals(board.get(i).getCurrentPosition())) {
-                returnValue = board.get(i);
+        for (Piece piece : board) {
+            if (pos.equals(piece.getCurrentPosition())) {
+                returnValue = piece;
             }
         }
 
@@ -62,17 +62,11 @@ public class Board {
     }
 
     public boolean isPositionOnBoard(Position pos) {
-        boolean returnValue = false;
-
-        if (pos.getX() < size && pos.getX() >= 0 && pos.getY() < size && pos.getY() >= 0) {
-            returnValue = true;
-        }
-
-        return returnValue;
+        return pos.getX() < size && pos.getX() >= 0 && pos.getY() < size && pos.getY() >= 0;
     }
 
     public void deletePieceFromBoard(Position currentPos) {
-        board.remove(currentPos);
+        board.remove(getPieceFromPosition(currentPos));
     }
 
     public void movePiece(Position currentPos, Position targetPos) {
@@ -89,6 +83,10 @@ public class Board {
             }
         }
 
+    }
+
+    public void makePieceOnPositionCrowned(Position pos) {
+        getPieceFromPosition(pos).setCrowned(true);
     }
 
     @Override

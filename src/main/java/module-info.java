@@ -3,8 +3,6 @@ module de.check.checkers {
     requires javafx.web;
     requires javafx.fxml;
     requires jdk.jsobject;
-    requires java.desktop;
-    requires java.sql;
 
     exports de.check.checkers;
     exports de.check.checkers.ui;
