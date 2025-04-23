@@ -4,7 +4,8 @@
     padding: 0;
 }
 
-.wrapper{
+.wrapper {
+    background-color: #212121;
     overflow-x: hidden;
     overflow-y: hidden;
     height: 100vh;
@@ -14,38 +15,142 @@
     padding: 0;
 }
 
-.boardContainer {
-    position: relative;
-    outline: 2px solid #000000;
+
+.boardBorder {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-    justify-self: center;
+    border: 2px solid #000;
+    border-radius: 10px;
     align-self: center;
+    justify-self: center;
+    overflow: hidden;
+    justify-items: center;
+    align-items: center;
     width: 80vh;
     height: 80vh;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box;
+    position: relative;
 }
-.sidebarContainer{
-    outline: 2px solid #000000;
+
+.borderDiv{
     display: grid;
-    grid-template-rows: 3fr 1fr;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.checkerBoard {
+    grid-area: board;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: grid;
+    box-sizing: border-box;
+}
+
+.sidebarContainer {
+    box-sizing: border-box;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 1fr 4fr 1fr;
     height: calc(100vh - 40px);
     margin: 20px;
     padding: 0;
+    background-color: #eae8d9;
 }
 
-.sidebarBody{
+.sidebarHeader {
     display: grid;
-    overflow-y: auto;
     align-self: center;
-    max-height: 70%;
-    margin: 0;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 10px;
     padding: 0;
+    height: 5vh;
 }
 
-.sidebarFooter{
+.sidebarHeader8x8 {
+    box-sizing: border-box;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    display: grid;
+    cursor: pointer;
+    user-select: none;
+    align-self: center;
+    position: relative;
+}
+
+.sidebarHeader8x8:hover {
+    background-color: #d2cfbc;
+}
+
+.sidebarHeader10x10 {
+    box-sizing: border-box;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    display: grid;
+    cursor: pointer;
+    user-select: none;
+    align-self: center;
+    position: relative;
+}
+
+.sidebarHeader10x10:hover {
+    background-color: #d2cfbc;
+}
+
+.sidebarHeader12x12 {
+    box-sizing: border-box;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    display: grid;
+    cursor: pointer;
+    user-select: none;
+    align-self: center;
+    position: relative;
+}
+
+.sidebarHeader12x12:hover {
+    background-color: #d2cfbc;
+}
+
+
+.sidebarBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    flex-grow: 1;
+    max-height: 70%;
+    padding: 0;
+    margin: 0;
+}
+
+
+.sidebarMoveEntry {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    font-family: sans-serif;
+    font-size: 0.9rem;
+}
+
+.moveIndicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.sidebarBodyCrownedPiece {
+    background-color: goldenrod;
+    border-radius: 10px;
+}
+
+.sidebarFooter {
     display: grid;
     align-self: center;
     margin: 0;
@@ -55,54 +160,105 @@
 
 .baseField {
     display: grid;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
+    place-items: center;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.piece {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .black {
-    background-color: Black;
+    /*background-color: Black;*/
+    background-color: #4DA147FF;
 }
 
 .black_player {
-    width: 10vh;
-    height: 10vh;
-    scale: 0.9;
-    filter: brightness(0) saturate(100%) invert(30%) sepia(5%) saturate(36%) hue-rotate(331deg) brightness(97%) contrast(84%);
+    width: 90%;
+    height: 90%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+    filter: brightness(0) saturate(100%) invert(25%) sepia(94%) saturate(0%) hue-rotate(10deg) brightness(97%) contrast(95%) drop-shadow(0 0 3px black);
     cursor: pointer;
     user-select: none;
+    will-change: transform;
 }
 
 .black:hover {
-    background-color: #3E3E3E;
+    background-color: rgb(65, 134, 60);
+
+}
+
+.black_player:hover {
+    transform: scale(1);
 }
 
 .white {
-    background-color: white;
+    background-color: #eae8d9;
 }
 
 .white_player {
-    width: 10vh;
-    height: 10vh;
-    scale: 0.9;
-    filter: brightness(0) saturate(100%) invert(98%) sepia(100%) saturate(2%) hue-rotate(65deg) brightness(111%) contrast(101%);
+    width: 90%;
+    height: 90%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+    filter: brightness(0) saturate(100%) invert(98%) sepia(100%) saturate(2%) hue-rotate(65deg) brightness(111%) contrast(101%) drop-shadow(0 0 3px black);
     cursor: pointer;
     user-select: none;
+    will-change: transform;
 }
 
 .white:hover {
-    background-color: #E3E3E3;
+    background-color: #d2cfbc;
+}
+
+.white_player:hover {
+    transform: scale(1);
+}
+
+.crown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 50%;
+    height: 50%;
+    pointer-events: none;
+    filter: brightness(0) saturate(100%) invert(93%) sepia(17%) saturate(5915%) hue-rotate(338deg) brightness(87%) contrast(96%);
+}
+
+
+.crown:hover {
+    transform: scale(1);
+    z-index: 2;
 }
 
 .active {
-    background-color: #84b96f;
+    background-color: #d5ce59;
 }
 
 .active:hover {
-    background-color: #719E5F;
+    background-color: #b9b54e;
 }
 
 .active:active {
@@ -121,9 +277,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(194, 76, 76, 1);
-    opacity: 0; /* Start with no visibility */
-    animation: fadeInOut 0.3s ease-in-out; /* Adjust duration and iteration as needed */
-    pointer-events: none; /* Prevent interaction with the overlay */
+    pointer-events: none;
 }
 
 @keyframes fadeInOut {

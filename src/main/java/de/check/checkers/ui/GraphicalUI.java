@@ -21,7 +21,7 @@ import java.net.URL;
  */
 public class GraphicalUI extends Scene {
     private static final GraphicalUI instance = new GraphicalUI(new StackPane());
-    private JavaFXInterface javaFXInterface = new JavaFXInterface();
+    private final JavaFXInterface javaFXInterface = new JavaFXInterface();
 
 
     private WebEngine webEngine;
@@ -43,6 +43,8 @@ public class GraphicalUI extends Scene {
      */
     private void checkerBoard() {
         WebView browser = new WebView();
+
+        browser.setMinSize(1820, 980);
 
         webEngine = browser.getEngine();
 
@@ -93,7 +95,11 @@ public class GraphicalUI extends Scene {
             return controller.isPieceBlack(controller.getPieceFromPosition(new Position(x, y)));
         }
 
-        /**
+        public boolean isPieceCrowned(int x, int y) {
+            return controller.isPieceCrowned(controller.getPieceFromPosition(new Position(x, y)));
+        }
+
+        /**1
          * <b>Takes the currently clicked position, converts it to a 2 dimensional and decides, depending on the returned code form the controller, what JS-Method should be called</b>
          *
          * @param current1DPos current 1 dimensional position of the clicked piece
@@ -182,6 +188,9 @@ public class GraphicalUI extends Scene {
          */
         public int getBoardSize() {
             return controller.getBoardSize();
+        }
+        public void setBoardSize(int boardSize) {
+            controller.setBoardSize(boardSize);
         }
 
         public void printShit(String shit) {
